@@ -1,0 +1,17 @@
+{
+    "name": "alxishin/api-bundle",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ApiBundle\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "alxishin",
+            "email": "alxishin@gmail.com"
+        }
+    ],
+    "require": {}
+}

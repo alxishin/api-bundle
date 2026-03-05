@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 abstract class AbstractApiController extends AbstractController
 {
     protected const string ENTITY_CLASS = '';
-    protected const string SERIALIZE_GROUP = 'api';
+    protected const ?string SERIALIZE_GROUP = null;
 
     public function __construct(protected readonly EntityManagerInterface $entityManager)
     {

@@ -13,5 +13,9 @@
             "email": "alxishin@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "doctrine/orm": "^3.6",
+        "symfony/serializer": "^8.0",
+        "symfony/validator": "^8.0"
+    }
 }

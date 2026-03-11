@@ -57,6 +57,16 @@ readonly class BaseRequest implements RequestInterface
             description: 'Фильтрация по значениям, меньшим переданному значению. Например lt[date]=2000-01-01',
         )]
         public array $lt = [],
+
+        #[OA\Property(
+            description: 'Фильтрация по значениям, равным null. Например null[date]=1',
+        )]
+        public array $null = [],
+
+        #[OA\Property(
+            description: 'Фильтрация по значениям, меньшим переданному значению. Например notnull[date]=1',
+        )]
+        public array $notnull = [],
     )
     {
     }
@@ -92,6 +102,14 @@ readonly class BaseRequest implements RequestInterface
         foreach ($this->gt as $field => $item) {
             $this->handleFilter($queryBuilder, 't.'.$field, $item, '>', $i);
             $i++;
+        }
+
+        foreach ($this->null as $field => $item) {
+            $queryBuilder->andWhere(sprintf('%s is null', 't'.$field));
+        }
+
+        foreach ($this->notnull as $field => $item) {
+            $queryBuilder->andWhere(sprintf('%s is not null', 't'.$field));
         }
 
         if ($this->sortBy && $this->order) {

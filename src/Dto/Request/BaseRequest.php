@@ -105,11 +105,11 @@ readonly class BaseRequest implements RequestInterface
         }
 
         foreach ($this->null as $field => $item) {
-            $queryBuilder->andWhere(sprintf('%s is null', 't'.$field));
+            $queryBuilder->andWhere(sprintf('%s is null', 't.'.$field));
         }
 
         foreach ($this->notnull as $field => $item) {
-            $queryBuilder->andWhere(sprintf('%s is not null', 't'.$field));
+            $queryBuilder->andWhere(sprintf('%s is not null', 't.'.$field));
         }
 
         if ($this->sortBy && $this->order) {

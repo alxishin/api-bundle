@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace ApiBundle\Controller\Api;
 
+use ApiBundle\Dto\Request\AbstractDto;
 use ApiBundle\Dto\Request\RequestInterface;
 use ApiBundle\Dto\Response\Data\List\ListResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class AbstractApiController extends AbstractController
 {
     protected const string ENTITY_CLASS = '';
     protected const ?string SERIALIZE_GROUP = null;
+    protected const ?array VALIDATION_GROUPS = null;
 
-    public function __construct(protected readonly EntityManagerInterface $entityManager)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly ValidatorInterface $validator)
     {
     }
 
@@ -33,5 +37,21 @@ abstract class AbstractApiController extends AbstractController
 
         $offset = ($request->page - 1) * $limit;
         return $request->getItemsAndTotalCount($this->entityManager->getRepository(static::ENTITY_CLASS)->createQueryBuilder('t'), $limit, $offset);
+    }
+
+    protected function createHandle(AbstractDto $dto, ?object $entity, array $config = []): JsonResponse
+    {
+        $entity ??= new (self::ENTITY_CLASS)();
+        $dto->mapDtoToEntity($entity, $config);
+
+        $errors = $this->validator->validate($entity, groups: self::VALIDATION_GROUPS);
+        if (count($errors) > 0) {
+            return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+
+        return $this->json($entity);
     }
 }

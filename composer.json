@@ -16,6 +16,9 @@
     "require": {
         "doctrine/orm": "^3.6",
         "symfony/serializer": "^8.0",
-        "symfony/validator": "^8.0"
+        "symfony/validator": "^8.0",
+        "symfony/property-access": "^8.0",
+        "symfony/framework-bundle": "^8.0",
+        "symfony/http-foundation": "^8.0"
     }
 }

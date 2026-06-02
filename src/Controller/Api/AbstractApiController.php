@@ -39,9 +39,9 @@ abstract class AbstractApiController extends AbstractController
         return $request->getItemsAndTotalCount($this->entityManager->getRepository(static::ENTITY_CLASS)->createQueryBuilder('t'), $limit, $offset);
     }
 
-    protected function createHandle(AbstractDto $dto, ?object $entity, array $config = []): JsonResponse
+    protected function createHandle(AbstractDto $dto, ?object $entity = null, array $config = []): JsonResponse
     {
-        $entity ??= new (self::ENTITY_CLASS)();
+        $entity ??= new (static::ENTITY_CLASS)();
         $dto->mapDtoToEntity($entity, $config);
 
         $errors = $this->validator->validate($entity, groups: self::VALIDATION_GROUPS);
